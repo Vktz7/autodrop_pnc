@@ -687,11 +687,7 @@
       var custRes = await fetch(SUPABASE_URL + '/rest/v1/customers', {
         method: 'POST',
         headers: authHeaders(true),
-        body: JSON.stringify({
-  user_id: session.user.id,
-  name: name,
-  address: addr
-})
+        body: JSON.stringify({ name: name, address: addr })
       });
       if(!custRes.ok) throw new Error('Falha ao salvar cliente');
       var custData = await custRes.json();
