@@ -683,6 +683,11 @@
     var displayId = '';
     var errorMsg = '';
 
+    console.log('Sessão atual ao comprar:', session);
+    if(!session || !session.access_token){
+      console.error('Sem sessão válida — usuário não está autenticado de fato.');
+    }
+
     try{
       var custRes = await fetch(SUPABASE_URL + '/rest/v1/customers', {
         method: 'POST',
@@ -780,7 +785,8 @@
   // ---------- INIT ----------
   loadSavedSession();
   updateHeader();
-  document.getElementById('openAuth').onclick = openAuthModal;
+  var initialAuthBtn = document.getElementById('openAuth');
+  if(initialAuthBtn){ initialAuthBtn.onclick = openAuthModal; }
 })();
 </script>
 
