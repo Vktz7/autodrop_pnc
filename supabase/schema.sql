@@ -1,131 +1,156 @@
 -- ============================================================
--- AUTODROP™ — BANCO DE DADOS SUPABASE
--- Execute esta query inteira em um banco NOVO.
+-- Autodrop™ / PNC — schema para Supabase
+-- Rode este arquivo inteiro no SQL Editor do projeto.
+--
+-- IMPORTANTE:
+-- Este script APAGA as tabelas atuais e recria tudo.
 -- ============================================================
 
--- 1. LIMPEZA
-DROP TABLE IF EXISTS payments CASCADE;
-DROP TABLE IF EXISTS orders CASCADE;
-DROP TABLE IF EXISTS customers CASCADE;
+begin;
 
--- 2. CLIENTES
-CREATE TABLE customers (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    name TEXT NOT NULL,
-    address TEXT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+drop table if exists public.payments cascade;
+drop table if exists public.orders cascade;
+drop table if exists public.customers cascade;
+
+-- ------------------------------------------------------------
+-- 1. TABELAS
+-- ------------------------------------------------------------
+
+create table public.customers (
+    id         bigint generated always as identity primary key,
+    user_id    uuid not null references auth.users(id) on delete cascade,
+    name       text not null check (length(trim(name)) between 2 and 120),
+    address    text not null check (length(trim(address)) between 5 and 300),
+    created_at timestamptz not null default now()
 );
 
--- 3. PEDIDOS
-CREATE TABLE orders (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    customer_id BIGINT NOT NULL REFERENCES customers(id),
-    user_id UUID NOT NULL REFERENCES auth.users(id),
-    product_name TEXT NOT NULL DEFAULT 'Autodrop™',
-    amount NUMERIC NOT NULL DEFAULT 499.00,
-    created_at TIMESTAMPTZ DEFAULT NOW()
+create table public.orders (
+    id           bigint generated always as identity primary key,
+    customer_id  bigint not null references public.customers(id) on delete restrict,
+    user_id      uuid not null references auth.users(id) on delete cascade,
+    product_name text not null default 'Autodrop™',
+    amount       numeric(10,2) not null default 499.00 check (amount >= 0),
+    created_at   timestamptz not null default now()
 );
 
--- 4. PAGAMENTOS
-CREATE TABLE payments (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    order_id BIGINT NOT NULL REFERENCES orders(id),
-    method TEXT NOT NULL CHECK (method IN ('Pix', 'Cartão', 'Boleto')),
-    paid BOOLEAN NOT NULL DEFAULT FALSE,
-    paid_at TIMESTAMPTZ
+create table public.payments (
+    id        bigint generated always as identity primary key,
+    order_id  bigint not null references public.orders(id) on delete cascade,
+    method    text not null check (method in ('Pix', 'Cartão', 'Boleto')),
+    paid      boolean not null default false,
+    paid_at   timestamptz
 );
 
--- 5. ATIVAR RLS
-ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
-ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
-ALTER TABLE payments ENABLE ROW LEVEL SECURITY;
+create index customers_user_id_idx on public.customers(user_id);
+create index orders_user_id_idx on public.orders(user_id);
+create index orders_customer_id_idx on public.orders(customer_id);
+create index payments_order_id_idx on public.payments(order_id);
 
--- 6. PERMISSÕES
-GRANT USAGE ON SCHEMA public TO anon, authenticated;
+-- ------------------------------------------------------------
+-- 2. RLS
+-- ------------------------------------------------------------
 
-GRANT SELECT, INSERT, UPDATE, DELETE
-ON customers TO anon, authenticated;
+alter table public.customers enable row level security;
+alter table public.orders enable row level security;
+alter table public.payments enable row level security;
 
-GRANT SELECT, INSERT, UPDATE, DELETE
-ON orders TO anon, authenticated;
+-- Remova policies antigas, caso existam.
+drop policy if exists "customers_insert_own" on public.customers;
+drop policy if exists "customers_select_own" on public.customers;
+drop policy if exists "orders_insert_own" on public.orders;
+drop policy if exists "orders_select_own" on public.orders;
+drop policy if exists "payments_insert_own" on public.payments;
+drop policy if exists "payments_select_own" on public.payments;
 
-GRANT SELECT, INSERT, UPDATE, DELETE
-ON payments TO anon, authenticated;
+-- CUSTOMERS
+create policy "customers_insert_own"
+on public.customers
+for insert
+to authenticated
+with check (user_id = auth.uid());
 
-GRANT USAGE, SELECT
-ON ALL SEQUENCES IN SCHEMA public
-TO anon, authenticated;
+create policy "customers_select_own"
+on public.customers
+for select
+to authenticated
+using (user_id = auth.uid());
 
--- ============================================================
--- 7. POLÍTICAS DE CUSTOMERS
--- ============================================================
-
-CREATE POLICY "user insert customers"
-ON customers
-FOR INSERT
-TO authenticated
-WITH CHECK (TRUE);
-
-CREATE POLICY "user select own customers"
-ON customers
-FOR SELECT
-TO authenticated
-USING (
-    id IN (
-        SELECT customer_id
-        FROM orders
-        WHERE user_id = auth.uid()
-    )
-);
-
--- ============================================================
--- 8. POLÍTICAS DE ORDERS
--- ============================================================
-
-CREATE POLICY "user insert own orders"
-ON orders
-FOR INSERT
-TO authenticated
-WITH CHECK (
+-- ORDERS
+create policy "orders_insert_own"
+on public.orders
+for insert
+to authenticated
+with check (
     user_id = auth.uid()
-);
-
-CREATE POLICY "user select own orders"
-ON orders
-FOR SELECT
-TO authenticated
-USING (
-    user_id = auth.uid()
-);
-
--- ============================================================
--- 9. POLÍTICAS DE PAYMENTS
--- ============================================================
-
-CREATE POLICY "user insert own payments"
-ON payments
-FOR INSERT
-TO authenticated
-WITH CHECK (
-    order_id IN (
-        SELECT id
-        FROM orders
-        WHERE user_id = auth.uid()
+    and exists (
+        select 1
+        from public.customers c
+        where c.id = customer_id
+          and c.user_id = auth.uid()
     )
 );
 
-CREATE POLICY "user select own payments"
-ON payments
-FOR SELECT
-TO authenticated
-USING (
-    order_id IN (
-        SELECT id
-        FROM orders
-        WHERE user_id = auth.uid()
+create policy "orders_select_own"
+on public.orders
+for select
+to authenticated
+using (user_id = auth.uid());
+
+-- PAYMENTS
+create policy "payments_insert_own"
+on public.payments
+for insert
+to authenticated
+with check (
+    exists (
+        select 1
+        from public.orders o
+        where o.id = order_id
+          and o.user_id = auth.uid()
     )
 );
 
+create policy "payments_select_own"
+on public.payments
+for select
+to authenticated
+using (
+    exists (
+        select 1
+        from public.orders o
+        where o.id = order_id
+          and o.user_id = auth.uid()
+    )
+);
+
+-- ------------------------------------------------------------
+-- 3. PERMISSÕES DO API ROLE
+-- ------------------------------------------------------------
+
+grant usage on schema public to anon, authenticated;
+grant select, insert on public.customers to authenticated;
+grant select, insert on public.orders to authenticated;
+grant select, insert on public.payments to authenticated;
+grant usage, select on all sequences in schema public to authenticated;
+
+commit;
+
 -- ============================================================
--- FIM
+-- CONSULTA ADMINISTRATIVA
+-- Rode separadamente no SQL Editor para conferir os pedidos.
 -- ============================================================
+--
+-- select
+--   o.id as pedido,
+--   u.email as email_cliente,
+--   c.name as nome,
+--   c.address as endereco,
+--   p.method as forma_pagamento,
+--   case when p.paid then 'Pago' else 'Pendente' end as status,
+--   o.amount as valor,
+--   o.created_at
+-- from public.orders o
+-- join public.customers c on c.id = o.customer_id
+-- left join public.payments p on p.order_id = o.id
+-- join auth.users u on u.id = o.user_id
+-- order by o.created_at desc;
