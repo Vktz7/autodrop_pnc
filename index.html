@@ -3,792 +3,565 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Autodrop™ — uma peça automotiva absolutamente sem função útil. PNC — Produtos Não Comercializáveis.">
+<meta name="theme-color" content="#171512">
 <title>Autodrop™ — A peça que não serve pra nada | PNC</title>
 <style>
-  :root{
-    --bg:#171512;
-    --bg2:#211d18;
-    --card:#242019;
-    --rust:#c65a2e;
-    --rust-dark:#8f3f1f;
-    --steel:#8d8677;
-    --steel-light:#c9c2ae;
-    --cream:#f0e9db;
-    --line:#3a3428;
-    --ok:#5c8a4d;
-    --bad:#b3462f;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0;
-    background:var(--bg);
-    color:var(--cream);
-    font-family:'Courier New', monospace;
-    line-height:1.5;
-  }
-  .noise{
-    background-image:
-      repeating-linear-gradient(0deg, rgba(255,255,255,0.015) 0px, transparent 1px, transparent 2px, rgba(255,255,255,0.015) 3px);
-  }
-  header{
-    border-bottom:3px solid var(--rust);
-    background:var(--bg2);
-    padding:14px 20px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    position:sticky;
-    top:0;
-    z-index:10;
-  }
-  .logo{
-    font-family:'Georgia', serif;
-    font-weight:900;
-    font-size:22px;
-    letter-spacing:1px;
-    color:var(--rust);
-    text-transform:uppercase;
-  }
-  .logo span{color:var(--steel-light);}
-  .header-right{display:flex; align-items:center; gap:10px;}
-  .user-pill{
-    font-size:12px;
-    color:var(--steel-light);
-    border:1px solid var(--line);
-    padding:6px 12px;
-    border-radius:20px;
-    max-width:180px;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    white-space:nowrap;
-  }
-  .cart-btn, .ghost-btn{
-    background:var(--rust);
-    color:var(--bg);
-    border:none;
-    padding:8px 16px;
-    font-family:inherit;
-    font-weight:bold;
-    cursor:pointer;
-    border-radius:2px;
-    letter-spacing:0.5px;
-    font-size:13px;
-  }
-  .cart-btn:hover, .ghost-btn:hover{background:var(--rust-dark); color:var(--cream);}
-  .ghost-btn{
-    background:transparent;
-    color:var(--steel-light);
-    border:1px solid var(--line);
-  }
-  .ghost-btn:hover{border-color:var(--rust); color:var(--rust); background:transparent;}
-
-  .hero{
-    max-width:900px;
-    margin:0 auto;
-    padding:50px 20px 30px;
-    text-align:center;
-  }
-  .tag{
-    display:inline-block;
-    background:var(--bad);
-    color:var(--cream);
-    padding:4px 12px;
-    font-size:12px;
-    letter-spacing:2px;
-    text-transform:uppercase;
-    margin-bottom:18px;
-    transform:rotate(-2deg);
-  }
-  h1{
-    font-family:'Georgia', serif;
-    font-size:44px;
-    margin:0 0 14px;
-    color:var(--cream);
-    line-height:1.1;
-  }
-  h1 em{color:var(--rust); font-style:normal;}
-  .subtitle{
-    color:var(--steel-light);
-    font-size:16px;
-    max-width:560px;
-    margin:0 auto 26px;
-  }
-
-  .product-visual{
-    max-width:900px;
-    margin:0 auto;
-    padding:0 20px 40px;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:30px;
-    align-items:center;
-  }
-  @media(max-width:700px){.product-visual{grid-template-columns:1fr;}}
-
-  .part-frame{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:4px;
-    padding:30px;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-  }
-  .price-box{
-    background:var(--card);
-    border:1px solid var(--line);
-    border-radius:4px;
-    padding:24px;
-  }
-  .price-old{
-    color:var(--steel);
-    text-decoration:line-through;
-    font-size:18px;
-  }
-  .price-new{
-    color:var(--rust);
-    font-size:40px;
-    font-weight:bold;
-    margin:4px 0 12px;
-  }
-  .price-new sup{font-size:18px;}
-  .feature-list{list-style:none; padding:0; margin:0 0 20px; font-size:14px; color:var(--steel-light);}
-  .feature-list li{padding:5px 0; border-bottom:1px dashed var(--line);}
-  .feature-list li:before{content:"— "; color:var(--rust);}
-  .buy-btn{
-    width:100%;
-    background:var(--rust);
-    color:var(--bg);
-    border:none;
-    padding:16px;
-    font-family:inherit;
-    font-weight:bold;
-    font-size:16px;
-    letter-spacing:1px;
-    cursor:pointer;
-    border-radius:2px;
-    text-transform:uppercase;
-  }
-  .buy-btn:hover{background:var(--rust-dark); color:var(--cream);}
-
-  .section{
-    max-width:900px;
-    margin:0 auto;
-    padding:40px 20px;
-    border-top:1px solid var(--line);
-  }
-  .section h2{
-    font-family:'Georgia', serif;
-    color:var(--rust);
-    font-size:22px;
-    margin-top:0;
-  }
-  .review{
-    background:var(--card);
-    border:1px solid var(--line);
-    padding:16px;
-    margin-bottom:12px;
-    border-radius:4px;
-    font-size:14px;
-  }
-  .review .stars{color:var(--rust); margin-bottom:6px;}
-  .review .name{color:var(--steel); font-size:12px;}
-
-  footer{
-    text-align:center;
-    padding:30px 20px;
-    color:var(--steel);
-    font-size:12px;
-    border-top:1px solid var(--line);
-  }
-
-  .overlay{
-    display:none;
-    position:fixed; inset:0;
-    background:rgba(0,0,0,0.7);
-    z-index:100;
-    align-items:flex-start;
-    justify-content:center;
-    padding:40px 16px;
-    overflow:auto;
-  }
-  .overlay.active{display:flex;}
-  .modal{
-    background:var(--bg2);
-    border:1px solid var(--rust);
-    border-radius:6px;
-    max-width:440px;
-    width:100%;
-    padding:26px;
-  }
-  .modal h3{
-    font-family:'Georgia', serif;
-    color:var(--rust);
-    margin-top:0;
-    font-size:20px;
-  }
-  .modal-close{
-    float:right;
-    background:none;
-    border:none;
-    color:var(--steel-light);
-    font-size:20px;
-    cursor:pointer;
-  }
-  label{
-    display:block;
-    font-size:12px;
-    color:var(--steel-light);
-    margin:14px 0 5px;
-    text-transform:uppercase;
-    letter-spacing:0.5px;
-  }
-  input, select{
-    width:100%;
-    background:var(--card);
-    border:1px solid var(--line);
-    color:var(--cream);
-    padding:10px;
-    font-family:inherit;
-    font-size:14px;
-    border-radius:3px;
-  }
-  input:focus, select:focus{outline:1px solid var(--rust); border-color:var(--rust);}
-  .pay-options{display:flex; gap:8px; margin-top:6px;}
-  .pay-opt{
-    flex:1;
-    border:1px solid var(--line);
-    background:var(--card);
-    padding:10px 6px;
-    text-align:center;
-    font-size:12px;
-    cursor:pointer;
-    border-radius:3px;
-    color:var(--steel-light);
-  }
-  .pay-opt.selected{border-color:var(--rust); color:var(--rust); background:rgba(198,90,46,0.08);}
-  .error-msg{color:var(--bad); font-size:12px; margin-top:4px; display:none;}
-  .summary-row{
-    display:flex; justify-content:space-between;
-    padding:8px 0; font-size:14px; color:var(--steel-light);
-    border-top:1px dashed var(--line);
-    margin-top:14px;
-  }
-  .total-row{
-    display:flex; justify-content:space-between;
-    padding-top:10px; font-weight:bold; color:var(--rust); font-size:18px;
-  }
-  .confirm-btn{
-    width:100%;
-    margin-top:18px;
-    background:var(--rust);
-    color:var(--bg);
-    border:none;
-    padding:14px;
-    font-family:inherit;
-    font-weight:bold;
-    letter-spacing:1px;
-    cursor:pointer;
-    border-radius:3px;
-    text-transform:uppercase;
-  }
-  .confirm-btn:hover{background:var(--rust-dark); color:var(--cream);}
-  .confirm-btn:disabled{opacity:0.5; cursor:not-allowed;}
-
-  .success-box{text-align:center; padding:10px 0;}
-  .success-box .icon{font-size:40px; color:var(--ok); margin-bottom:10px;}
-  .order-id{color:var(--steel); font-size:12px; margin-top:8px;}
-
-  .orders-panel{
-    margin-top:16px;
-    max-height:260px;
-    overflow:auto;
-    border:1px solid var(--line);
-    border-radius:4px;
-  }
-  .order-row{
-    padding:10px 12px;
-    border-bottom:1px solid var(--line);
-    font-size:12px;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:8px;
-  }
-  .order-row:last-child{border-bottom:none;}
-  .badge{
-    padding:2px 8px;
-    border-radius:10px;
-    font-size:10px;
-    text-transform:uppercase;
-    letter-spacing:0.5px;
-    white-space:nowrap;
-  }
-  .badge.paid{background:rgba(92,138,77,0.2); color:var(--ok); border:1px solid var(--ok);}
-  .badge.unpaid{background:rgba(179,70,47,0.2); color:var(--bad); border:1px solid var(--bad);}
-  .empty-hint{color:var(--steel); font-size:13px; padding:12px;}
-
-  .auth-tabs{display:flex; gap:8px; margin-bottom:16px;}
-  .auth-tab{
-    flex:1;
-    text-align:center;
-    padding:8px;
-    font-size:13px;
-    color:var(--steel);
-    border-bottom:2px solid var(--line);
-    cursor:pointer;
-    text-transform:uppercase;
-    letter-spacing:0.5px;
-  }
-  .auth-tab.active{color:var(--rust); border-bottom-color:var(--rust);}
-  .auth-hint{font-size:12px; color:var(--steel); margin-top:14px; text-align:center;}
+:root{
+  --bg:#12110f;--bg2:#1c1915;--card:#242019;--card2:#2b251e;
+  --rust:#c65a2e;--rust2:#e27442;--rust-dark:#8f3f1f;
+  --steel:#8d8677;--steel-light:#d7cfbd;--cream:#f0e9db;
+  --line:#3a3428;--ok:#6fa45c;--bad:#c04d36;--shadow:0 18px 55px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--cream);font-family:"Courier New",monospace;line-height:1.55}
+body:before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.035;background-image:repeating-linear-gradient(0deg,#fff 0 1px,transparent 1px 3px);z-index:999}
+button,input{font:inherit}
+button{cursor:pointer}
+a{color:inherit}
+.container{width:min(1100px,calc(100% - 32px));margin:auto}
+header{position:sticky;top:0;z-index:50;background:rgba(28,25,21,.96);backdrop-filter:blur(10px);border-bottom:2px solid var(--rust)}
+.nav{min-height:68px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.logo{font-family:Georgia,serif;font-weight:900;font-size:22px;letter-spacing:1px;color:var(--rust);text-transform:uppercase}
+.logo span{color:var(--steel-light)}
+.nav-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+.user-pill{font-size:12px;color:var(--steel-light);border:1px solid var(--line);padding:7px 11px;border-radius:999px;max-width:220px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn,.buy-btn{border:1px solid var(--rust);background:var(--rust);color:var(--bg);font-weight:800;padding:10px 15px;border-radius:3px;letter-spacing:.4px}
+.btn:hover,.buy-btn:hover{background:var(--rust2)}
+.btn.ghost{background:transparent;color:var(--steel-light);border-color:var(--line)}
+.btn.ghost:hover{color:var(--rust);border-color:var(--rust)}
+.hero{text-align:center;padding:72px 0 38px}
+.tag{display:inline-block;background:var(--bad);padding:5px 12px;font-size:11px;letter-spacing:2px;text-transform:uppercase;transform:rotate(-1.5deg);margin-bottom:18px}
+h1{font-family:Georgia,serif;font-size:clamp(38px,7vw,66px);line-height:1.03;margin:0 auto 18px;max-width:900px}
+h1 em{color:var(--rust);font-style:normal}
+.subtitle{max-width:720px;margin:0 auto;color:var(--steel-light);font-size:16px}
+.hero-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:26px}
+.product-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:26px;align-items:stretch;padding-bottom:52px}
+.panel{background:linear-gradient(145deg,var(--card),#201c17);border:1px solid var(--line);border-radius:7px;box-shadow:var(--shadow)}
+.product-art{min-height:430px;display:grid;place-items:center;padding:25px}
+.product-art svg{width:min(390px,85%);height:auto;filter:drop-shadow(0 15px 20px rgba(0,0,0,.3))}
+.price-panel{padding:30px;display:flex;flex-direction:column;justify-content:center}
+.kicker{color:var(--steel);font-size:11px;letter-spacing:1.5px;text-transform:uppercase}
+.price-old{color:var(--steel);text-decoration:line-through;margin-top:10px}
+.price{font-size:clamp(42px,6vw,58px);font-weight:900;color:var(--rust);line-height:1;margin:5px 0 20px}
+.price small{font-size:20px}
+.feature-list{list-style:none;padding:0;margin:0 0 24px;color:var(--steel-light)}
+.feature-list li{padding:8px 0;border-bottom:1px dashed var(--line)}
+.feature-list li:before{content:"— ";color:var(--rust)}
+.buy-btn{width:100%;font-size:16px;text-transform:uppercase;padding:15px}
+.note{font-size:11px;color:var(--steel);margin:12px 0 0;text-align:center}
+section{padding:54px 0;border-top:1px solid var(--line)}
+.section-title{font-family:Georgia,serif;color:var(--rust);font-size:28px;margin:0 0 10px}
+.section-lead{color:var(--steel-light);max-width:760px}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:25px}
+.info-card{background:var(--card);border:1px solid var(--line);padding:20px;border-radius:5px}
+.info-card h3{margin:0 0 7px;font-family:Georgia,serif;color:var(--cream)}
+.info-card p{margin:0;color:var(--steel-light);font-size:13px}
+.specs{width:100%;border-collapse:collapse;margin-top:22px;background:var(--card);border:1px solid var(--line)}
+.specs th,.specs td{padding:12px;border-bottom:1px solid var(--line);text-align:left;font-size:13px}
+.specs th{color:var(--rust);width:35%}.specs td{color:var(--steel-light)}
+.review-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}
+.review{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:5px}
+.stars{color:var(--rust);letter-spacing:2px}.review p{margin:8px 0;color:var(--steel-light)}.name{color:var(--steel);font-size:12px}
+.warning{border:1px solid var(--rust);background:rgba(198,90,46,.07);padding:16px;border-radius:5px;color:var(--steel-light);font-size:13px;margin-top:22px}
+footer{border-top:1px solid var(--line);padding:34px 0;color:var(--steel);font-size:12px}
+.overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:100;align-items:flex-start;justify-content:center;padding:35px 14px;overflow:auto}
+.overlay.active{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--rust);border-radius:7px;width:min(480px,100%);padding:25px;box-shadow:var(--shadow)}
+.modal.wide{width:min(650px,100%)}
+.close{float:right;border:0;background:transparent;color:var(--steel-light);font-size:25px;line-height:1}
+.close:hover{color:var(--rust)}
+.modal h2{font-family:Georgia,serif;color:var(--rust);margin:0 0 18px}
+label{display:block;font-size:11px;color:var(--steel-light);margin:14px 0 5px;text-transform:uppercase;letter-spacing:.6px}
+input{width:100%;background:var(--card);border:1px solid var(--line);color:var(--cream);padding:11px;border-radius:3px;outline:none}
+input:focus{border-color:var(--rust);box-shadow:0 0 0 2px rgba(198,90,46,.12)}
+.error{display:none;color:var(--bad);font-size:12px;margin-top:5px}
+.auth-tabs{display:flex;gap:8px;margin-bottom:15px}
+.auth-tab{flex:1;border:0;border-bottom:2px solid var(--line);background:transparent;color:var(--steel);padding:9px;text-transform:uppercase;font-size:12px}
+.auth-tab.active{color:var(--rust);border-bottom-color:var(--rust)}
+.pay-options{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:6px}
+.pay-opt{border:1px solid var(--line);background:var(--card);color:var(--steel-light);padding:11px 5px;text-align:center;border-radius:3px}
+.pay-opt.selected{border-color:var(--rust);color:var(--rust);background:rgba(198,90,46,.08)}
+.summary{border-top:1px dashed var(--line);margin-top:18px;padding-top:12px}
+.summary-row,.total-row{display:flex;justify-content:space-between;padding:5px 0}
+.total-row{font-size:18px;color:var(--rust);font-weight:bold}
+.modal .btn{width:100%;margin-top:17px}
+.success{text-align:center;padding:15px 0}
+.success-icon{font-size:48px;color:var(--ok)}
+.order-id{color:var(--steel);font-size:12px;margin-top:8px}
+.orders{max-height:390px;overflow:auto;border:1px solid var(--line);border-radius:4px}
+.order{padding:13px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:12px;font-size:12px}
+.order:last-child{border:0}
+.badge{font-size:10px;text-transform:uppercase;white-space:nowrap;padding:3px 8px;border-radius:999px;height:max-content}
+.paid{color:var(--ok);border:1px solid var(--ok);background:rgba(111,164,92,.1)}
+.pending{color:var(--bad);border:1px solid var(--bad);background:rgba(192,77,54,.1)}
+.hint{font-size:12px;color:var(--steel);text-align:center;margin:13px 0 0}
+.hidden{display:none!important}
+@media(max-width:760px){
+  .product-grid,.review-grid{grid-template-columns:1fr}
+  .info-grid{grid-template-columns:1fr}
+  .hero{padding-top:48px}
+  .nav{align-items:flex-start;padding:12px 0}
+  .nav-right{gap:5px}
+  .user-pill{max-width:140px}
+}
+@media(max-width:430px){
+  .container{width:min(100% - 22px,1100px)}
+  .nav-right .btn{padding:8px 9px;font-size:11px}
+  .pay-options{grid-template-columns:1fr}
+}
 </style>
 </head>
-<body class="noise">
-
+<body>
 <header>
-  <div class="logo">AUTODROP<span>™</span></div>
-  <div class="header-right" id="headerRight">
-    <button class="ghost-btn" id="openAuth">Entrar</button>
+  <div class="container nav">
+    <div class="logo">AUTODROP<span>™</span></div>
+    <div class="nav-right" id="headerRight">
+      <button class="btn ghost" id="openAuth">Entrar</button>
+    </div>
   </div>
 </header>
 
-<div class="hero">
-  <div class="tag">Produto 100% sem função útil</div>
-  <h1>A peça que só serve pra <em>cair</em> e fazer <em>barulho</em>.</h1>
-  <p class="subtitle">Engenharia reversa de décadas de peças de moto que quebram sozinhas — agora otimizada pra fazer exatamente isso, e nada mais.</p>
-</div>
-
-<div class="product-visual">
-  <div class="part-frame">
-    <svg width="220" height="220" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
-      <circle cx="110" cy="110" r="85" fill="none" stroke="#3a3428" stroke-width="2" stroke-dasharray="4 4"/>
-      <circle cx="110" cy="110" r="55" fill="#c65a2e" stroke="#8f3f1f" stroke-width="4"/>
-      <circle cx="110" cy="110" r="14" fill="#171512" stroke="#8d8677" stroke-width="2"/>
-      <g stroke="#8f3f1f" stroke-width="3">
-        <line x1="110" y1="55" x2="110" y2="70"/>
-        <line x1="110" y1="150" x2="110" y2="165"/>
-        <line x1="55" y1="110" x2="70" y2="110"/>
-        <line x1="150" y1="110" x2="165" y2="110"/>
-      </g>
-      <text x="110" y="116" text-anchor="middle" fill="#f0e9db" font-size="11" font-family="Courier New">SEM USO</text>
-    </svg>
+<main>
+  <div class="container hero">
+    <div class="tag">Produto 100% sem função útil</div>
+    <h1>A peça que só serve pra <em>cair</em> e fazer <em>barulho</em>.</h1>
+    <p class="subtitle">Engenharia reversa de décadas de peças que quebram sozinhas. Agora transformada em um produto cuidadosamente projetado para não resolver absolutamente nenhum problema.</p>
+    <div class="hero-actions">
+      <a class="btn" href="#detalhes">Ver detalhes</a>
+      <button class="btn ghost" id="heroBuy">Comprar R$ 499,00</button>
+    </div>
   </div>
-  <div class="price-box">
-    <div class="price-old">R$ 500,00</div>
-    <div class="price-new">R$ 499<sup>,00</sup></div>
-    <ul class="feature-list">
-      <li>Não trava, não gira, não sustenta nada</li>
-      <li>Cai em média a cada 40 km</li>
-      <li>Chocalha em qualquer velocidade acima de 20 km/h</li>
-      <li>Compatível com absolutamente nenhum sistema</li>
-      <li>Garantia: nenhuma</li>
-    </ul>
-    <button class="buy-btn" id="openCheckout">Comprar agora</button>
-  </div>
-</div>
 
-<div class="section">
-  <h2>Avaliações</h2>
-  <div class="review">
-    <div class="stars">★★★★★</div>
-    <p>Comprei sem saber por quê e ela não me decepcionou: caiu no primeiro quebra-mola.</p>
-    <div class="name">— Renato T.</div>
-  </div>
-  <div class="review">
-    <div class="stars">★★★★☆</div>
-    <p>O barulho é surpreendentemente autêntico. Perdi um ponto porque demorou 60km pra cair.</p>
-    <div class="name">— Juliana M.</div>
-  </div>
-</div>
-
-<footer>
-  PNC — Produtos Não Comercializáveis Ltda. — checkout de demonstração, pagamento simulado.
-</footer>
-
-<!-- AUTH MODAL -->
-<div class="overlay" id="authOverlay">
-  <div class="modal">
-    <button class="modal-close" id="closeAuth" aria-label="Fechar">×</button>
-    <h3 id="authTitle">Entrar</h3>
-
-    <div class="auth-tabs">
-      <div class="auth-tab active" id="tabLogin">Entrar</div>
-      <div class="auth-tab" id="tabSignup">Criar conta</div>
+  <div class="container product-grid">
+    <div class="panel product-art" aria-label="Ilustração do produto">
+      <svg viewBox="0 0 420 420" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Peça Autodrop">
+        <circle cx="210" cy="210" r="170" fill="none" stroke="#3a3428" stroke-width="2" stroke-dasharray="5 8"/>
+        <circle cx="210" cy="210" r="112" fill="#c65a2e" stroke="#8f3f1f" stroke-width="9"/>
+        <circle cx="210" cy="210" r="30" fill="#12110f" stroke="#8d8677" stroke-width="4"/>
+        <g stroke="#8f3f1f" stroke-width="6" stroke-linecap="round">
+          <line x1="210" y1="98" x2="210" y2="70"/><line x1="210" y1="322" x2="210" y2="350"/>
+          <line x1="98" y1="210" x2="70" y2="210"/><line x1="322" y1="210" x2="350" y2="210"/>
+          <line x1="131" y1="131" x2="111" y2="111"/><line x1="289" y1="289" x2="309" y2="309"/>
+          <line x1="289" y1="131" x2="309" y2="111"/><line x1="131" y1="289" x2="111" y2="309"/>
+        </g>
+        <text x="210" y="216" text-anchor="middle" fill="#f0e9db" font-size="18" font-weight="bold" font-family="Courier New">SEM USO</text>
+        <text x="210" y="390" text-anchor="middle" fill="#8d8677" font-size="11" font-family="Courier New">PNC // AUTODROP™ // REV. 1.0</text>
+      </svg>
     </div>
 
+    <div class="panel price-panel">
+      <div class="kicker">Especificação comercial</div>
+      <div class="price-old">R$ 500,00</div>
+      <div class="price">R$ 499<small>,00</small></div>
+      <ul class="feature-list">
+        <li>Não trava, não gira e não sustenta nada</li>
+        <li>Cai em média a cada 40 km</li>
+        <li>Chocalha acima de 20 km/h</li>
+        <li>Compatível com absolutamente nenhum sistema</li>
+        <li>Instalação incluída: você descobre como</li>
+        <li>Garantia: nenhuma</li>
+      </ul>
+      <button class="buy-btn" id="openCheckout">Comprar agora</button>
+      <p class="note">Demonstração escolar. Pagamento simulado. Nenhuma cobrança real é efetuada.</p>
+    </div>
+  </div>
+
+  <section id="detalhes">
+    <div class="container">
+      <h2 class="section-title">Por que comprar?</h2>
+      <p class="section-lead">Porque nem todo produto precisa resolver um problema. A Autodrop™ representa o ápice da engenharia aplicada ao desnecessário.</p>
+      <div class="info-grid">
+        <article class="info-card"><h3>Quase engenharia</h3><p>Projetada com a precisão necessária para funcionar exatamente como não deveria.</p></article>
+        <article class="info-card"><h3>Baixa utilidade</h3><p>Testes internos confirmam níveis excepcionalmente baixos de utilidade prática.</p></article>
+        <article class="info-card"><h3>Alto ruído</h3><p>Produz o som mecânico necessário para você saber que ela está ali. Ou não.</p></article>
+      </div>
+      <table class="specs" aria-label="Especificações do produto">
+        <tr><th>Modelo</th><td>ADP-001</td></tr>
+        <tr><th>Categoria</th><td>PNC — Produto Não Comercializável</td></tr>
+        <tr><th>Função principal</th><td>Cair e fazer barulho</td></tr>
+        <tr><th>Compatibilidade</th><td>Nenhum sistema conhecido</td></tr>
+        <tr><th>Status</th><td>Experimental / demonstração</td></tr>
+      </table>
+      <div class="warning"><strong>Nota importante:</strong> este site é uma demonstração acadêmica. O checkout registra dados no Supabase para fins de demonstração, mas o pagamento é totalmente simulado e não existe processamento financeiro real.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="container">
+      <h2 class="section-title">Avaliações</h2>
+      <div class="review-grid">
+        <article class="review"><div class="stars">★★★★★</div><p>“Comprei sem saber por quê e ela não me decepcionou: caiu no primeiro quebra-mola.”</p><div class="name">— Renato T.</div></article>
+        <article class="review"><div class="stars">★★★★☆</div><p>“O barulho é surpreendentemente autêntico. Perdi um ponto porque demorou 60 km pra cair.”</p><div class="name">— Juliana M.</div></article>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="container">PNC — Produtos Não Comercializáveis Ltda. · Autodrop™ · Projeto de demonstração acadêmica · Pagamento simulado.</div>
+</footer>
+
+<!-- AUTH -->
+<div class="overlay" id="authOverlay">
+  <div class="modal">
+    <button class="close" id="closeAuth" aria-label="Fechar">×</button>
+    <h2 id="authTitle">Entrar</h2>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin">Entrar</button>
+      <button class="auth-tab" id="tabSignup">Criar conta</button>
+    </div>
     <label for="authEmail">Email</label>
-    <input type="email" id="authEmail" placeholder="voce@email.com">
-    <div class="error-msg" id="err-authEmail">Informe um email válido.</div>
-
+    <input type="email" id="authEmail" autocomplete="email" placeholder="voce@email.com">
+    <div class="error" id="err-authEmail">Informe um email válido.</div>
     <label for="authPass">Senha</label>
-    <input type="password" id="authPass" placeholder="Mínimo 6 caracteres">
-    <div class="error-msg" id="err-authPass">A senha precisa ter ao menos 6 caracteres.</div>
-
-    <div class="error-msg" id="err-authGeneral" style="margin-top:10px;"></div>
-
-    <button class="confirm-btn" id="authSubmit">Entrar</button>
-    <p class="auth-hint" id="authHint">Ainda não tem conta? Clique em "Criar conta" acima.</p>
+    <input type="password" id="authPass" autocomplete="current-password" placeholder="Mínimo 6 caracteres">
+    <div class="error" id="err-authPass">A senha precisa ter ao menos 6 caracteres.</div>
+    <div class="error" id="err-authGeneral"></div>
+    <button class="btn" id="authSubmit">Entrar</button>
+    <p class="hint" id="authHint">Ainda não tem conta? Clique em “Criar conta”.</p>
   </div>
 </div>
 
-<!-- CHECKOUT MODAL -->
+<!-- CHECKOUT -->
 <div class="overlay" id="checkoutOverlay">
   <div class="modal">
-    <button class="modal-close" id="closeCheckout" aria-label="Fechar">×</button>
-    <h3>Finalizar pedido</h3>
-
+    <button class="close" id="closeCheckout" aria-label="Fechar">×</button>
+    <h2>Finalizar pedido</h2>
     <div id="formView">
       <label for="fname">Nome completo</label>
-      <input type="text" id="fname" placeholder="Seu nome">
-      <div class="error-msg" id="err-fname">Preencha o nome.</div>
+      <input type="text" id="fname" autocomplete="name" placeholder="Seu nome">
+      <div class="error" id="err-fname">Preencha o nome.</div>
 
       <label for="faddr">Endereço</label>
-      <input type="text" id="faddr" placeholder="Rua, número, bairro, cidade">
-      <div class="error-msg" id="err-faddr">Preencha o endereço.</div>
+      <input type="text" id="faddr" autocomplete="street-address" placeholder="Rua, número, bairro, cidade">
+      <div class="error" id="err-faddr">Preencha o endereço.</div>
 
       <label>Forma de pagamento</label>
       <div class="pay-options" id="payOptions">
-        <div class="pay-opt" data-val="Pix">Pix</div>
-        <div class="pay-opt" data-val="Cartão">Cartão</div>
-        <div class="pay-opt" data-val="Boleto">Boleto</div>
+        <button class="pay-opt" data-val="Pix" type="button">Pix</button>
+        <button class="pay-opt" data-val="Cartão" type="button">Cartão</button>
+        <button class="pay-opt" data-val="Boleto" type="button">Boleto</button>
       </div>
-      <div class="error-msg" id="err-pay">Escolha uma forma de pagamento.</div>
+      <div class="error" id="err-pay">Escolha uma forma de pagamento.</div>
 
-      <div class="summary-row"><span>Autodrop™</span><span>R$ 499,00</span></div>
-      <div class="total-row"><span>Total</span><span>R$ 499,00</span></div>
-
-      <button class="confirm-btn" id="confirmOrder">Confirmar pedido</button>
+      <div class="summary">
+        <div class="summary-row"><span>Autodrop™</span><span>R$ 499,00</span></div>
+        <div class="total-row"><span>Total</span><span>R$ 499,00</span></div>
+      </div>
+      <button class="btn" id="confirmOrder">Confirmar pedido</button>
+      <p class="hint">Nenhum pagamento real será realizado.</p>
     </div>
-
-    <div id="successView" style="display:none;">
-      <div class="success-box">
-        <div class="icon">✓</div>
-        <p id="successMsg">Pedido registrado!</p>
-        <div class="order-id" id="orderIdOut"></div>
-      </div>
+    <div id="successView" class="success hidden">
+      <div class="success-icon">✓</div>
+      <h3 id="successMsg">Pedido registrado!</h3>
+      <div class="order-id" id="orderIdOut"></div>
+      <button class="btn ghost" id="successClose">Fechar</button>
     </div>
   </div>
 </div>
 
-<!-- ORDERS MODAL -->
+<!-- ORDERS -->
 <div class="overlay" id="ordersOverlay">
-  <div class="modal">
-    <button class="modal-close" id="closeOrders" aria-label="Fechar">×</button>
-    <h3>Meus pedidos</h3>
-    <div class="orders-panel" id="ordersPanel">
-      <div class="empty-hint">Nenhum pedido ainda.</div>
-    </div>
+  <div class="modal wide">
+    <button class="close" id="closeOrders" aria-label="Fechar">×</button>
+    <h2>Meus pedidos</h2>
+    <div class="orders" id="ordersPanel"><div class="hint">Carregando...</div></div>
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
-(function(){
-  var SUPABASE_URL = 'https://omwsifplchkalweejekn.supabase.co';
-  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9td3NpZnBsY2hrYWx3ZWVqZWtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwMTEwNTUsImV4cCI6MjEwMjU4NzA1NX0.0a5bsnys2J-FrZYW6WHViabC19vF-GnfAHrv7WclPJA';
+(() => {
+  'use strict';
 
-  var session = null; // { access_token, user: { id, email } }
+  // ==========================================================
+  // CONFIGURAÇÃO
+  // ==========================================================
+  const SUPABASE_URL = 'https://omwsifplchkalweejekn.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9td3NpZnBsY2hrYWx3ZWVqZWtuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODcwMTEwNTUsImV4cCI6MjEwMjU4NzA1NX0.0a5bsnys2J-FrZYW6WHViabC19vF-GnfAHrv7WclPJA';
+  const PRICE = 499.00;
 
-  function authHeaders(wantReturn){
-    var h = {
-      'Content-Type': 'application/json',
-      'apikey': SUPABASE_KEY,
-      'Authorization': 'Bearer ' + (session ? session.access_token : SUPABASE_KEY)
-    };
-    if(wantReturn) h['Prefer'] = 'return=representation';
-    return h;
+  if (!window.supabase) {
+    alert('Não foi possível carregar o cliente do Supabase. Verifique sua conexão.');
+    return;
   }
 
-  function saveSession(s){
-    session = s;
-    try{ localStorage.setItem('autodrop_session', JSON.stringify(s)); }catch(e){}
-  }
-  function clearSession(){
-    session = null;
-    try{ localStorage.removeItem('autodrop_session'); }catch(e){}
-  }
-  function loadSavedSession(){
-    try{
-      var raw = localStorage.getItem('autodrop_session');
-      if(raw) session = JSON.parse(raw);
-    }catch(e){}
+  const db = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+  });
+
+  const $ = id => document.getElementById(id);
+  let authMode = 'login';
+  let selectedPay = null;
+
+  function show(id, visible) { $(id).style.display = visible ? 'block' : 'none'; }
+  function openModal(id) { $(id).classList.add('active'); }
+  function closeModal(id) { $(id).classList.remove('active'); }
+
+  function setError(id, message = '') {
+    const el = $(id);
+    el.textContent = message;
+    el.style.display = message ? 'block' : 'none';
   }
 
-  function updateHeader(){
-    var el = document.getElementById('headerRight');
-    if(session && session.user){
+  function escapeHtml(value) {
+    const div = document.createElement('div');
+    div.textContent = value ?? '';
+    return div.innerHTML;
+  }
+
+  function formatDate(value) {
+    return new Intl.DateTimeFormat('pt-BR', {
+      dateStyle: 'short', timeStyle: 'short'
+    }).format(new Date(value));
+  }
+
+  async function getSession() {
+    const { data } = await db.auth.getSession();
+    return data.session;
+  }
+
+  function updateHeader(session) {
+    const el = $('headerRight');
+    if (session?.user) {
+      const email = escapeHtml(session.user.email || 'Usuário');
       el.innerHTML =
-        '<span class="user-pill">' + escapeHtml(session.user.email) + '</span>' +
-        '<button class="ghost-btn" id="openOrdersBtn">Meus pedidos</button>' +
-        '<button class="ghost-btn" id="logoutBtn">Sair</button>';
-      document.getElementById('openOrdersBtn').onclick = function(){
-        loadOrders();
-        document.getElementById('ordersOverlay').classList.add('active');
+        `<span class="user-pill" title="${email}">${email}</span>` +
+        `<button class="btn ghost" id="openOrdersBtn">Meus pedidos</button>` +
+        `<button class="btn ghost" id="logoutBtn">Sair</button>`;
+      $('openOrdersBtn').onclick = async () => {
+        openModal('ordersOverlay');
+        await loadOrders();
       };
-      document.getElementById('logoutBtn').onclick = function(){
-        clearSession();
-        updateHeader();
+      $('logoutBtn').onclick = async () => {
+        await db.auth.signOut();
       };
-    }else{
-      el.innerHTML = '<button class="ghost-btn" id="openAuth">Entrar</button>';
-      document.getElementById('openAuth').onclick = openAuthModal;
+    } else {
+      el.innerHTML = '<button class="btn ghost" id="openAuth">Entrar</button>';
+      $('openAuth').onclick = openAuthModal;
     }
   }
 
-  function escapeHtml(str){
-    var d = document.createElement('div');
-    d.textContent = str;
-    return d.innerHTML;
+  function openAuthModal() {
+    setError('err-authEmail'); setError('err-authPass'); setError('err-authGeneral');
+    $('authEmail').value = ''; $('authPass').value = '';
+    setAuthMode('login');
+    openModal('authOverlay');
   }
 
-  // ---------- AUTH MODAL ----------
-  var authOverlay = document.getElementById('authOverlay');
-  var authMode = 'login';
-
-  function openAuthModal(){
-    document.getElementById('authEmail').value = '';
-    document.getElementById('authPass').value = '';
-    showErr('err-authEmail', false);
-    showErr('err-authPass', false);
-    var g = document.getElementById('err-authGeneral');
-    g.style.display = 'none';
-    authOverlay.classList.add('active');
+  function setAuthMode(mode) {
+    authMode = mode;
+    $('tabLogin').classList.toggle('active', mode === 'login');
+    $('tabSignup').classList.toggle('active', mode === 'signup');
+    $('authTitle').textContent = mode === 'login' ? 'Entrar' : 'Criar conta';
+    $('authSubmit').textContent = mode === 'login' ? 'Entrar' : 'Criar conta';
+    $('authPass').autocomplete = mode === 'login' ? 'current-password' : 'new-password';
+    $('authHint').textContent = mode === 'login'
+      ? 'Ainda não tem conta? Clique em “Criar conta”.'
+      : 'Já tem conta? Clique em “Entrar”.';
+    setError('err-authGeneral');
   }
-  document.getElementById('closeAuth').onclick = function(){
-    authOverlay.classList.remove('active');
+
+  $('openAuth').onclick = openAuthModal;
+  $('closeAuth').onclick = () => closeModal('authOverlay');
+  $('tabLogin').onclick = () => setAuthMode('login');
+  $('tabSignup').onclick = () => setAuthMode('signup');
+
+  $('authSubmit').onclick = async () => {
+    const email = $('authEmail').value.trim();
+    const password = $('authPass').value;
+    setError('err-authEmail', email && email.includes('@') ? '' : 'Informe um email válido.');
+    setError('err-authPass', password.length >= 6 ? '' : 'A senha precisa ter ao menos 6 caracteres.');
+    if ($('err-authEmail').style.display === 'block' || $('err-authPass').style.display === 'block') return;
+
+    const btn = $('authSubmit');
+    btn.disabled = true;
+    const old = btn.textContent;
+    btn.textContent = 'Aguarde...';
+    setError('err-authGeneral');
+
+    try {
+      if (authMode === 'login') {
+        const { error } = await db.auth.signInWithPassword({ email, password });
+        if (error) throw error;
+        closeModal('authOverlay');
+      } else {
+        const { data, error } = await db.auth.signUp({
+          email, password,
+          options: { emailRedirectTo: window.location.origin + window.location.pathname }
+        });
+        if (error) throw error;
+        if (data.session) {
+          closeModal('authOverlay');
+        } else {
+          setError('err-authGeneral', 'Conta criada. Verifique seu email para confirmar a conta e depois entre.');
+        }
+      }
+    } catch (error) {
+      setError('err-authGeneral', error.message || 'Não foi possível autenticar.');
+    } finally {
+      btn.disabled = false;
+      btn.textContent = old;
+    }
   };
 
-  function setAuthMode(mode){
-    authMode = mode;
-    document.getElementById('tabLogin').classList.toggle('active', mode === 'login');
-    document.getElementById('tabSignup').classList.toggle('active', mode === 'signup');
-    document.getElementById('authTitle').textContent = mode === 'login' ? 'Entrar' : 'Criar conta';
-    document.getElementById('authSubmit').textContent = mode === 'login' ? 'Entrar' : 'Criar conta';
-    document.getElementById('authHint').textContent = mode === 'login'
-      ? 'Ainda não tem conta? Clique em "Criar conta" acima.'
-      : 'Já tem conta? Clique em "Entrar" acima.';
-  }
-  document.getElementById('tabLogin').onclick = function(){ setAuthMode('login'); };
-  document.getElementById('tabSignup').onclick = function(){ setAuthMode('signup'); };
-
-  function showErr(id, show){
-    document.getElementById(id).style.display = show ? 'block' : 'none';
-  }
-
-  document.getElementById('authSubmit').onclick = async function(){
-    var email = document.getElementById('authEmail').value.trim();
-    var pass = document.getElementById('authPass').value;
-    var genErr = document.getElementById('err-authGeneral');
-    genErr.style.display = 'none';
-
-    var valid = true;
-    if(!email || email.indexOf('@') === -1){ showErr('err-authEmail', true); valid = false; } else { showErr('err-authEmail', false); }
-    if(!pass || pass.length < 6){ showErr('err-authPass', true); valid = false; } else { showErr('err-authPass', false); }
-    if(!valid) return;
-
-    var btn = document.getElementById('authSubmit');
-    btn.disabled = true;
-    var originalLabel = btn.textContent;
-    btn.textContent = 'Aguarde...';
-
-    var endpoint = authMode === 'login' ? '/auth/v1/token?grant_type=password' : '/auth/v1/signup';
-
-    try{
-      var res = await fetch(SUPABASE_URL + endpoint, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'apikey': SUPABASE_KEY },
-        body: JSON.stringify({ email: email, password: pass })
-      });
-      var data = await res.json();
-
-      if(!res.ok){
-        genErr.textContent = data.error_description || data.msg || data.error || 'Não foi possível autenticar.';
-        genErr.style.display = 'block';
-        btn.disabled = false;
-        btn.textContent = originalLabel;
+  function openCheckout() {
+    getSession().then(session => {
+      if (!session) {
+        openAuthModal();
+        setError('err-authGeneral', 'Entre ou crie uma conta para continuar.');
         return;
       }
+      $('formView').classList.remove('hidden');
+      $('successView').classList.add('hidden');
+      setError('err-fname'); setError('err-faddr'); setError('err-pay');
+      openModal('checkoutOverlay');
+    });
+  }
 
-      if(authMode === 'signup'){
-        if(data.access_token){
-          saveSession({ access_token: data.access_token, user: data.user });
-          updateHeader();
-          authOverlay.classList.remove('active');
-        }else{
-          genErr.textContent = 'Conta criada. Verifique seu email para confirmar e depois faça login.';
-          genErr.style.display = 'block';
-          setAuthMode('login');
-        }
-      }else{
-        saveSession({ access_token: data.access_token, user: data.user });
-        updateHeader();
-        authOverlay.classList.remove('active');
-      }
-    }catch(e){
-      genErr.textContent = 'Erro de conexão. Verifique sua internet.';
-      genErr.style.display = 'block';
-    }
+  $('openCheckout').onclick = openCheckout;
+  $('heroBuy').onclick = openCheckout;
+  $('closeCheckout').onclick = () => closeModal('checkoutOverlay');
+  $('successClose').onclick = () => closeModal('checkoutOverlay');
+  $('closeOrders').onclick = () => closeModal('ordersOverlay');
 
-    btn.disabled = false;
-    btn.textContent = originalLabel;
-  };
-
-  // ---------- CHECKOUT MODAL ----------
-  var checkoutOverlay = document.getElementById('checkoutOverlay');
-  var formView = document.getElementById('formView');
-  var successView = document.getElementById('successView');
-
-  document.getElementById('openCheckout').onclick = function(){
-    if(!session){
-      openAuthModal();
-      return;
-    }
-    formView.style.display = 'block';
-    successView.style.display = 'none';
-    checkoutOverlay.classList.add('active');
-  };
-  document.getElementById('closeCheckout').onclick = function(){
-    checkoutOverlay.classList.remove('active');
-  };
-  document.getElementById('closeOrders').onclick = function(){
-    document.getElementById('ordersOverlay').classList.remove('active');
-  };
-
-  var selectedPay = null;
-  var payOpts = document.querySelectorAll('.pay-opt');
-  payOpts.forEach(function(opt){
-    opt.onclick = function(){
-      payOpts.forEach(function(o){ o.classList.remove('selected'); });
+  document.querySelectorAll('.pay-opt').forEach(opt => {
+    opt.onclick = () => {
+      document.querySelectorAll('.pay-opt').forEach(x => x.classList.remove('selected'));
       opt.classList.add('selected');
-      selectedPay = opt.getAttribute('data-val');
-      showErr('err-pay', false);
+      selectedPay = opt.dataset.val;
+      setError('err-pay');
     };
   });
 
-  document.getElementById('confirmOrder').onclick = async function(){
-    var name = document.getElementById('fname').value.trim();
-    var addr = document.getElementById('faddr').value.trim();
+  $('confirmOrder').onclick = async () => {
+    const session = await getSession();
+    if (!session?.user) {
+      closeModal('checkoutOverlay');
+      openAuthModal();
+      return;
+    }
 
-    var valid = true;
-    if(!name){ showErr('err-fname', true); valid = false; } else { showErr('err-fname', false); }
-    if(!addr){ showErr('err-faddr', true); valid = false; } else { showErr('err-faddr', false); }
-    if(!selectedPay){ showErr('err-pay', true); valid = false; }
-    if(!valid) return;
+    const name = $('fname').value.trim();
+    const address = $('faddr').value.trim();
 
-    var btn = document.getElementById('confirmOrder');
+    setError('err-fname', name ? '' : 'Preencha o nome.');
+    setError('err-faddr', address ? '' : 'Preencha o endereço.');
+    setError('err-pay', selectedPay ? '' : 'Escolha uma forma de pagamento.');
+    if ($('err-fname').style.display === 'block' || $('err-faddr').style.display === 'block' || $('err-pay').style.display === 'block') return;
+
+    const btn = $('confirmOrder');
     btn.disabled = true;
-    btn.textContent = 'Processando...';
+    btn.textContent = 'Registrando...';
 
-    var paid = (selectedPay === 'Pix' || selectedPay === 'Cartão');
-    var displayId = '';
-    var errorMsg = '';
+    try {
+      // O customer já recebe o user_id. Isso elimina o problema de
+      // "customer criado, mas sem ID retornado por causa do RLS".
+      const { data: customer, error: customerError } = await db
+        .from('customers')
+        .insert({ name, address, user_id: session.user.id })
+        .select('id')
+        .single();
+      if (customerError) throw customerError;
 
-    console.log('Sessão atual ao comprar:', session);
-    if(!session || !session.access_token){
-      console.error('Sem sessão válida — usuário não está autenticado de fato.');
-    }
-
-    try{
-      var custRes = await fetch(SUPABASE_URL + '/rest/v1/customers', {
-        method: 'POST',
-        headers: authHeaders(true),
-        body: JSON.stringify({ name: name, address: addr })
-      });
-      if(!custRes.ok) throw new Error('Falha ao salvar cliente');
-      var custData = await custRes.json();
-      var customerId = custData[0].id;
-
-      var orderRes = await fetch(SUPABASE_URL + '/rest/v1/orders', {
-        method: 'POST',
-        headers: authHeaders(true),
-        body: JSON.stringify({ customer_id: customerId, product_name: 'Autodrop™', amount: 499.00, user_id: session.user.id })
-      });
-      if(!orderRes.ok) throw new Error('Falha ao salvar pedido');
-      var orderData = await orderRes.json();
-      var orderId = orderData[0].id;
-
-      var payRes = await fetch(SUPABASE_URL + '/rest/v1/payments', {
-        method: 'POST',
-        headers: authHeaders(false),
-        body: JSON.stringify({
-          order_id: orderId,
-          method: selectedPay,
-          paid: paid,
-          paid_at: paid ? new Date().toISOString() : null
+      const { data: order, error: orderError } = await db
+        .from('orders')
+        .insert({
+          customer_id: customer.id,
+          user_id: session.user.id,
+          product_name: 'Autodrop™',
+          amount: PRICE
         })
-      });
-      if(!payRes.ok) throw new Error('Falha ao salvar pagamento');
+        .select('id')
+        .single();
+      if (orderError) throw orderError;
 
-      displayId = 'ADP-' + orderId;
-    }catch(e){
-      console.error('Falha ao salvar pedido no Supabase', e);
-      errorMsg = 'Não foi possível conectar ao banco. Verifique sua internet e tente de novo.';
+      const paid = selectedPay === 'Pix' || selectedPay === 'Cartão';
+      const { error: paymentError } = await db
+        .from('payments')
+        .insert({
+          order_id: order.id,
+          method: selectedPay,
+          paid,
+          paid_at: paid ? new Date().toISOString() : null
+        });
+      if (paymentError) throw paymentError;
+
+      $('successMsg').textContent = paid
+        ? 'Pedido confirmado e pagamento simulado!'
+        : 'Pedido registrado — pagamento pendente.';
+      $('orderIdOut').textContent = `Pedido ADP-${order.id}`;
+      $('formView').classList.add('hidden');
+      $('successView').classList.remove('hidden');
+
+      $('fname').value = '';
+      $('faddr').value = '';
+      document.querySelectorAll('.pay-opt').forEach(x => x.classList.remove('selected'));
+      selectedPay = null;
+    } catch (error) {
+      console.error(error);
+      alert('Não foi possível registrar o pedido.\n\n' + (error.message || 'Erro desconhecido.'));
+    } finally {
+      btn.disabled = false;
+      btn.textContent = 'Confirmar pedido';
     }
-
-    btn.disabled = false;
-    btn.textContent = 'Confirmar pedido';
-
-    if(errorMsg){
-      document.getElementById('successMsg').textContent = errorMsg;
-      document.getElementById('orderIdOut').textContent = '';
-    }else{
-      document.getElementById('successMsg').textContent = paid
-        ? 'Pedido confirmado e pago!'
-        : 'Pedido registrado — pagamento pendente (boleto).';
-      document.getElementById('orderIdOut').textContent = 'Pedido ' + displayId;
-    }
-
-    formView.style.display = 'none';
-    successView.style.display = 'block';
-
-    document.getElementById('fname').value = '';
-    document.getElementById('faddr').value = '';
-    payOpts.forEach(function(o){ o.classList.remove('selected'); });
-    selectedPay = null;
   };
 
-  // ---------- ORDERS ----------
-  async function loadOrders(){
-    var panel = document.getElementById('ordersPanel');
-    panel.innerHTML = '<div class="empty-hint">Carregando...</div>';
-    try{
-      var url = SUPABASE_URL + '/rest/v1/orders?select=id,created_at,customers(name),payments(method,paid)&order=created_at.desc&limit=50';
-      var res = await fetch(url, { headers: authHeaders(false) });
-      if(!res.ok) throw new Error('Falha ao buscar pedidos');
-      var orders = await res.json();
-
-      if(!orders || orders.length === 0){
-        panel.innerHTML = '<div class="empty-hint">Nenhum pedido ainda.</div>';
-        return;
-      }
-
-      panel.innerHTML = '';
-      orders.forEach(function(o){
-        var pay = (o.payments && o.payments[0]) ? o.payments[0] : { method: '—', paid: false };
-        var custName = (o.customers && o.customers.name) ? o.customers.name : '—';
-        var row = document.createElement('div');
-        row.className = 'order-row';
-        var badgeClass = pay.paid ? 'paid' : 'unpaid';
-        var badgeText = pay.paid ? 'Pago' : 'Pendente';
-        row.innerHTML =
-          '<div><strong>ADP-' + o.id + '</strong><br>' +
-          escapeHtml(custName) + ' · ' + escapeHtml(pay.method) +
-          '</div><span class="badge ' + badgeClass + '">' + badgeText + '</span>';
-        panel.appendChild(row);
-      });
-    }catch(e){
-      console.error(e);
-      panel.innerHTML = '<div class="empty-hint">Erro ao carregar pedidos. Verifique sua internet.</div>';
+  async function loadOrders() {
+    const panel = $('ordersPanel');
+    panel.innerHTML = '<div class="hint">Carregando...</div>';
+    const session = await getSession();
+    if (!session?.user) {
+      panel.innerHTML = '<div class="hint">Você precisa estar conectado.</div>';
+      return;
     }
+
+    const { data, error } = await db
+      .from('orders')
+      .select('id, created_at, product_name, amount, customers(name), payments(method, paid)')
+      .eq('user_id', session.user.id)
+      .order('created_at', { ascending: false })
+      .limit(50);
+
+    if (error) {
+      console.error(error);
+      panel.innerHTML = '<div class="hint">Erro ao carregar seus pedidos.</div>';
+      return;
+    }
+
+    if (!data?.length) {
+      panel.innerHTML = '<div class="hint">Nenhum pedido ainda.</div>';
+      return;
+    }
+
+    panel.innerHTML = data.map(order => {
+      const payment = Array.isArray(order.payments) ? order.payments[0] : order.payments;
+      const paid = Boolean(payment?.paid);
+      const customerName = escapeHtml(order.customers?.name || 'Cliente');
+      const method = escapeHtml(payment?.method || '—');
+      return `<div class="order">
+        <div><strong>ADP-${order.id}</strong><br>${customerName} · ${method}<br><span style="color:var(--steel)">${formatDate(order.created_at)}</span></div>
+        <span class="badge ${paid ? 'paid' : 'pending'}">${paid ? 'Pago' : 'Pendente'}</span>
+      </div>`;
+    }).join('');
   }
 
-  // ---------- INIT ----------
-  loadSavedSession();
-  updateHeader();
-  var initialAuthBtn = document.getElementById('openAuth');
-  if(initialAuthBtn){ initialAuthBtn.onclick = openAuthModal; }
+  // Fecha modais clicando fora.
+  document.querySelectorAll('.overlay').forEach(overlay => {
+    overlay.addEventListener('click', event => {
+      if (event.target === overlay) closeModal(overlay.id);
+    });
+  });
+
+  db.auth.onAuthStateChange((_event, session) => updateHeader(session));
+
+  (async () => {
+    const session = await getSession();
+    updateHeader(session);
+  })();
 })();
 </script>
-
 </body>
 </html>
